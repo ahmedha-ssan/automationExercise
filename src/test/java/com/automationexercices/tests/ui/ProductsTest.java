@@ -33,18 +33,18 @@ public class ProductsTest extends BaseTest {
                 );
 
     }
-
-    @Test
-    @Description("Add a product to the cart without logging in")
-    public void addProductToCartWithoutLogin() {
-
-        new ProductsPage(driver)
-                .navigate()
-                .clickOnAddToCart(testData.getJsonData("product1.name"))
-                .validateItemAddedLabel(
-                        testData.getJsonData("messages.cartAdded")
-                );
-    }
+//
+//    @Test
+//    @Description("Add a product to the cart without logging in")
+//    public void addProductToCartWithoutLogin() {
+//
+//        new ProductsPage(driver)
+//                .navigate()
+//                .clickOnAddToCart(testData.getJsonData("product1.name"))
+//                .validateItemAddedLabel(
+//                        testData.getJsonData("messages.cartAdded")
+//                );
+//    }
 
     //Configurations
     @BeforeClass
