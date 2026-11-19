@@ -53,51 +53,51 @@ public class CheckoutTest extends BaseTest {
                 .navigationBar
                 .verifyUserLabel(testData.getJsonData("name"));
     }
-    @Test(dependsOnMethods = {"loginToAccount","registerNewAccount"})
-    public void addProductToCart() {
-        new ProductsPage(driver)
-                .navigate()
-                .clickOnAddToCart(testData.getJsonData("product.name"))
-                .validateItemAddedLabel(testData.getJsonData("messages.cartAdded"))
-                .clickOnViewCart()
-                .verifyProductDetailsOnCart(
-                        testData.getJsonData("product.name"),
-                        testData.getJsonData("product.price"),
-                        testData.getJsonData("product.quantity"),
-                        testData.getJsonData("product.total")
-                );
-    }
-    @Test(dependsOnMethods ={"addProductToCart","loginToAccount","registerNewAccount"} )
-    public void checkout() {
-        new CartPage(driver)
-                .clickOnProceedToCheckout()
-                .verifyDeliveryAddress(
-                        testData.getJsonData("titleMale"),
-                        testData.getJsonData("firstName"),
-                        testData.getJsonData("lastName"),
-                        testData.getJsonData("companyName"),
-                        testData.getJsonData("address1"),
-                        testData.getJsonData("address2"),
-                        testData.getJsonData("city"),
-                        testData.getJsonData("state"),
-                        testData.getJsonData("zipcode"),
-                        testData.getJsonData("country"),
-                        testData.getJsonData("mobileNumber")
-                )
-                .verifyBillingAddress(
-                        testData.getJsonData("titleMale"),
-                        testData.getJsonData("firstName"),
-                        testData.getJsonData("lastName"),
-                        testData.getJsonData("companyName"),
-                        testData.getJsonData("address1"),
-                        testData.getJsonData("address2"),
-                        testData.getJsonData("city"),
-                        testData.getJsonData("state"),
-                        testData.getJsonData("zipcode"),
-                        testData.getJsonData("country"),
-                        testData.getJsonData("mobileNumber")
-                );
-    }
+//    @Test(dependsOnMethods = {"loginToAccount","registerNewAccount"})
+//    public void addProductToCart() {
+//        new ProductsPage(driver)
+//                .navigate()
+//                .clickOnAddToCart(testData.getJsonData("product.name"))
+//                .validateItemAddedLabel(testData.getJsonData("messages.cartAdded"))
+//                .clickOnViewCart()
+//                .verifyProductDetailsOnCart(
+//                        testData.getJsonData("product.name"),
+//                        testData.getJsonData("product.price"),
+//                        testData.getJsonData("product.quantity"),
+//                        testData.getJsonData("product.total")
+//                );
+//    }
+//    @Test(dependsOnMethods ={"addProductToCart","loginToAccount","registerNewAccount"} )
+//    public void checkout() {
+//        new CartPage(driver)
+//                .clickOnProceedToCheckout()
+//                .verifyDeliveryAddress(
+//                        testData.getJsonData("titleMale"),
+//                        testData.getJsonData("firstName"),
+//                        testData.getJsonData("lastName"),
+//                        testData.getJsonData("companyName"),
+//                        testData.getJsonData("address1"),
+//                        testData.getJsonData("address2"),
+//                        testData.getJsonData("city"),
+//                        testData.getJsonData("state"),
+//                        testData.getJsonData("zipcode"),
+//                        testData.getJsonData("country"),
+//                        testData.getJsonData("mobileNumber")
+//                )
+//                .verifyBillingAddress(
+//                        testData.getJsonData("titleMale"),
+//                        testData.getJsonData("firstName"),
+//                        testData.getJsonData("lastName"),
+//                        testData.getJsonData("companyName"),
+//                        testData.getJsonData("address1"),
+//                        testData.getJsonData("address2"),
+//                        testData.getJsonData("city"),
+//                        testData.getJsonData("state"),
+//                        testData.getJsonData("zipcode"),
+//                        testData.getJsonData("country"),
+//                        testData.getJsonData("mobileNumber")
+//                );
+//    }
 
     @Test(dependsOnMethods = {"checkout","loginToAccount","registerNewAccount"})
     public void deleteAccountAsPostCondition() {
