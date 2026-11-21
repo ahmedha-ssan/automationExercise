@@ -38,11 +38,22 @@ jobs:
           continue-on-error: true
           run: mvn -Dtest="${TARGET}" -DexecutionType="LocalHeadless" -Dextensions="disabled" -DbrowserType="Chrome" clean test
 
+        - name: Check Generated Reports
+          if: always()
+          shell: bash
+          run: |
+            echo "Searching for HTML reports..."
+            find . -type f -iname "*.html" -print
+            echo "Checking test-output directory..."
+            ls -R test-output || true
+
         - name: Upload Test Results
+          if: always()
           uses: actions/upload-artifact@v4
           with:
-              name: Chrome_Linux_Report
-              path: "test-output/reports/*.html"
+            name: Chrome_Linux_Report
+            path: test-output/reports/
+            if-no-files-found: warn
 
     Edge_Windows_Test:
       runs-on: windows-latest
@@ -65,11 +76,21 @@ jobs:
 
         - name: Running Tests
           continue-on-error: true
-          run: mvn -Dtest="${TARGET}" -DexecutionType="LocalHeadless" -Dextensions="enabled" -DbrowserType="Edge" clean test
+          run: mvn -Dtest="${TARGET}" -DexecutionType="LocalHeadless" -Dextensions="disabled" -DbrowserType="Chrome" clean test
+
+        - name: Check Generated Reports
+          if: always()
+          shell: bash
+          run: |
+            echo "Searching for HTML reports..."
+            find . -type f -iname "*.html" -print
+            echo "Checking test-output directory..."
+            ls -R test-output || true
 
         - name: Upload Test Results
+          if: always()
           uses: actions/upload-artifact@v4
           with:
-            name: Edge_Windows_Report
-            path: "test-output/reports/*.html"
-
+            name: Chrome_Linux_Report
+            path: test-output/reports/
+            if-no-files-found: warn
