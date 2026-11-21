@@ -10,87 +10,83 @@ on:
   schedule:
     - cron: '00 21 * * *'
   workflow_dispatch:
-#
+
 env:
   TARGET: "%regex[.*Tests.*],com.automationexercices.tests.**.**,com.automationexercices.tests.**"
 
 jobs:
-    Chrome_Linux_Test:
-      runs-on: ubuntu-latest
-      permissions:
-        checks: write
-      steps:
-        - name: checkout Code
-          uses: actions/checkout@v5
+  Chrome_Linux_Test:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+    defaults:
+      run:
+        working-directory: TAF
+    steps:
+      - name: checkout Code
+        uses: actions/checkout@v5
 
-        - name: setup java
-          uses: actions/setup-java@v4
-          with:
-              distribution: 'zulu' # See 'Supported distributions' for available options
-              java-version: '21'
+      - name: setup java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
 
-        - name: setup maven
-          uses: stCarolas/setup-maven@v5
-          with:
-              maven-version: 3.9.9
+      - name: setup maven
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: 3.9.9
 
-        - name: Running Tests
-          continue-on-error: true
-          run: mvn -Dtest="${TARGET}" -DexecutionType="LocalHeadless" -Dextensions="disabled" -DbrowserType="Chrome" clean test
+      - name: Running Tests
+        continue-on-error: true
+        run: mvn -Dtest="${{ env.TARGET }}" -DexecutionType="LocalHeadless" -Dextensions="disabled" -DbrowserType="Chrome" clean test
 
-        - name: Check Generated Reports
-          if: always()
-          shell: bash
-          run: |
-            echo "Searching for HTML reports..."
-            find . -type f -iname "*.html" -print
-            echo "Checking test-output directory..."
-            ls -R test-output || true
+      - name: Debug output folder
+        if: always()
+        run: ls -R test-output || echo "test-output not found"
 
-        - name: Upload Test Results
-          if: always()
-          uses: actions/upload-artifact@v4
-          with:
-            name: Chrome_Linux_Report
-            path: test-output/reports/
-            if-no-files-found: warn
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Chrome_Linux_Report
+          path: TAF/test-output/reports/*.html
+          if-no-files-found: error
 
-    Edge_Windows_Test:
-      runs-on: windows-latest
-      permissions:
-        checks: write
-      steps:
-        - name: checkout Code
-          uses: actions/checkout@v5
+  Edge_Windows_Test:
+    runs-on: windows-latest
+    permissions:
+      checks: write
+    defaults:
+      run:
+        working-directory: TAF
+    steps:
+      - name: checkout Code
+        uses: actions/checkout@v5
 
-        - name: setup java
-          uses: actions/setup-java@v4
-          with:
-            distribution: 'zulu' # See 'Supported distributions' for available options
-            java-version: '21'
+      - name: setup java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
 
-        - name: setup maven
-          uses: stCarolas/setup-maven@v5
-          with:
-            maven-version: 3.9.9
+      - name: setup maven
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: 3.9.9
 
-        - name: Running Tests
-          continue-on-error: true
-          run: mvn -Dtest="${TARGET}" -DexecutionType="LocalHeadless" -Dextensions="disabled" -DbrowserType="Chrome" clean test
+      - name: Running Tests
+        continue-on-error: true
+        run: mvn "-Dtest=${{ env.TARGET }}" "-DexecutionType=LocalHeadless" "-Dextensions=enabled" "-DbrowserType=Edge" clean test
 
-        - name: Check Generated Reports
-          if: always()
-          shell: bash
-          run: |
-            echo "Searching for HTML reports..."
-            find . -type f -iname "*.html" -print
-            echo "Checking test-output directory..."
-            ls -R test-output || true
+      - name: Debug output folder
+        if: always()
+        run: Get-ChildItem -Recurse test-output -ErrorAction SilentlyContinue
 
-        - name: Upload Test Results
-          if: always()
-          uses: actions/upload-artifact@v4
-          with:
-            name: Chrome_Linux_Report
-            path: test-output/reports/
-            if-no-files-found: warn
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Edge_Windows_Report
+          path: TAF/test-output/reports/*.html
+          if-no-files-found: error
